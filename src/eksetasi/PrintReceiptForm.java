@@ -1,0 +1,477 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package eksetasi;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.*;
+import org.apache.poi.xwpf.usermodel.*;
+import java.io.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+/**
+ *
+ * @author user
+ */
+public class PrintReceiptForm extends javax.swing.JFrame {
+
+    /**
+     * Creates new form PrintReceiptForm
+     */
+    public PrintReceiptForm() {
+        initComponents();
+    }
+    public PrintReceiptForm(int employeeID, int month){
+        initComponents();
+        Print(employeeID, month);
+    }
+    private void addRow(XWPFTable table, String label, String value){
+        XWPFTableRow row = table.getRow(table.getNumberOfRows() - 1);
+
+        XWPFTableCell labelCell = row.getCell(0);
+        if(labelCell == null) labelCell = row.createCell();
+
+        XWPFParagraph labelParagraph = labelCell.getParagraphs().get(0);
+        labelParagraph.setAlignment(ParagraphAlignment.LEFT);
+        XWPFRun labelRun = labelParagraph.createRun();
+        labelRun.setText(label);
+        labelRun.setBold(true);
+        labelRun.setFontFamily("Calibri");
+        labelRun.setFontSize(12);
+
+        XWPFTableCell valueCell = row.addNewTableCell();
+        XWPFParagraph valueParagraph = valueCell.getParagraphs().get(0);
+        valueParagraph.setAlignment(ParagraphAlignment.LEFT);
+        XWPFRun valueRun = valueParagraph.createRun();
+        valueRun.setText(value);
+        valueRun.setFontFamily("Calibri");
+        valueRun.setFontSize(12);
+       
+        XWPFTableRow newRow = table.createRow();
+        if (newRow.getTableCells().size() > 1) {
+            newRow.removeCell(1);
+        }
+    }
+    
+    private void Print(int employeeID, int month){
+        Connection conn = null;
+        try{
+            conn = DriverManager.getConnection(LoginForm.CONN_STRING, LoginForm.USERNAME, LoginForm.PASSWORD);
+            try (Statement stmt = conn.createStatement()) {
+                String sql = """
+                             SELECT employees.EmployeeID, FirstName, Lastname, AFM, Address, AMKA, Year, Month, Salary, LeaveDays, SickDays, AbsenceDays FROM employees
+                             JOIN salary
+                             ON employees.EmployeeID = salary.EmployeeID WHERE employees.EmployeeID = """ + employeeID + " AND Month = " + month;
+                try (ResultSet rs = stmt.executeQuery(sql)) {
+                    if(rs.next()){
+                        employeeID_field.setText(String.valueOf(rs.getInt("EmployeeID")));
+                        employeeID_field.setEditable(false);
+                        firstname_field.setText(rs.getString("Firstname"));
+                        firstname_field.setEditable(false);
+                        lastname_field.setText(rs.getString("Lastname"));
+                        lastname_field.setEditable(false);
+                        afm_field.setText(rs.getString("AFM"));
+                        afm_field.setEditable(false);
+                        address_field.setText(rs.getString("Address"));
+                        address_field.setEditable(false);
+                        amka_field.setText(rs.getString("AMKA"));
+                        amka_field.setEditable(false);
+                        year_field.setText(String.valueOf(rs.getInt("Year")));
+                        year_field.setEditable(false);
+                        month_field.setText(String.valueOf(rs.getInt("Month")));
+                        month_field.setEditable(false);
+                        salary_field.setText(String.valueOf(rs.getDouble("Salary")));
+                        salary_field.setEditable(false);
+                        leaveDays_field.setText(String.valueOf(rs.getInt("LeaveDays")));
+                        leaveDays_field.setEditable(false);
+                        sickDays_field.setText(String.valueOf(rs.getInt("SickDays")));
+                        sickDays_field.setEditable(false);
+                        absenceDays_field.setText(String.valueOf(rs.getInt("AbsenceDays")));
+                        absenceDays_field.setEditable(false);
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null, "Δεν βρέθηκε υπάλληλος με ID: " + employeeID);
+                    }
+                }
+            }
+            conn.close();
+        }
+        catch(SQLException exce){
+            JOptionPane.showMessageDialog(null, exce.getMessage());
+        }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        employeeID_field = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        firstname_field = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        lastname_field = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        afm_field = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        address_field = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        amka_field = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        year_field = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        month_field = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        salary_field = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        leaveDays_field = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        sickDays_field = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        absenceDays_field = new javax.swing.JTextField();
+        print_button = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel1.setText("Print Receipt");
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel2.setText("EmployeeID");
+
+        employeeID_field.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel3.setText("Firstname");
+
+        firstname_field.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel4.setText("Lastname");
+
+        lastname_field.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel5.setText("AFM");
+
+        afm_field.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel6.setText("Address");
+
+        address_field.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel7.setText("AMKA");
+
+        amka_field.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel8.setText("Year");
+
+        year_field.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel9.setText("Month");
+
+        month_field.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel10.setText("Salary");
+
+        salary_field.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel11.setText("Leave Days");
+
+        leaveDays_field.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel12.setText("Sick Days");
+
+        sickDays_field.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
+        jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel13.setText("Absence Days");
+
+        absenceDays_field.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
+        print_button.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        print_button.setText("Print Receipt");
+        print_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                print_buttonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(240, 240, 240)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(83, 83, 83)
+                        .addComponent(jLabel3)
+                        .addGap(172, 172, 172)
+                        .addComponent(jLabel7))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(81, 81, 81)
+                        .addComponent(jLabel4)
+                        .addGap(179, 179, 179)
+                        .addComponent(jLabel8))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(96, 96, 96)
+                        .addComponent(jLabel5)
+                        .addGap(191, 191, 191)
+                        .addComponent(jLabel9))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(75, 75, 75)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(employeeID_field))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(158, 158, 158)
+                                .addComponent(jLabel6))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(96, 96, 96)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(print_button)
+                                    .addComponent(address_field, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(51, 51, 51)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(firstname_field, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(amka_field, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(35, 35, 35))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(afm_field, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                                    .addComponent(lastname_field))
+                                .addGap(123, 123, 123)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(month_field, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(year_field, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel12)
+                            .addComponent(jLabel11))
+                        .addGap(79, 79, 79))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(leaveDays_field, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(salary_field, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(sickDays_field, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(absenceDays_field, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(66, 66, 66))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addGap(102, 102, 102))))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel10))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(employeeID_field)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(address_field)
+                        .addComponent(salary_field)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel3)
+                        .addComponent(jLabel11)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(leaveDays_field)
+                        .addComponent(amka_field))
+                    .addComponent(firstname_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel12))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(year_field)
+                        .addComponent(lastname_field))
+                    .addComponent(sickDays_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel13)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel5)
+                        .addComponent(jLabel9)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(absenceDays_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(month_field)
+                    .addComponent(afm_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(48, 48, 48)
+                .addComponent(print_button)
+                .addGap(28, 28, 28))
+        );
+
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void print_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_print_buttonActionPerformed
+        // TODO add your handling code here:
+        FileOutputStream wordFOUT = null;
+        BufferedOutputStream wordBOUT = null;
+        XWPFDocument document = null;
+        
+        JFileChooser wordFileChooser = new JFileChooser();
+        wordFileChooser.setDialogTitle("Save as");
+        FileNameExtensionFilter fnef = new FileNameExtensionFilter("WORD FILES", "doc", "docx");
+        wordFileChooser.setFileFilter(fnef);
+        int wordChooser = wordFileChooser.showSaveDialog(null);
+        if(wordChooser == JFileChooser.APPROVE_OPTION){
+            try{
+                document = new XWPFDocument();
+                XWPFParagraph title = document.createParagraph();
+                title.setAlignment(ParagraphAlignment.CENTER);
+                XWPFRun titleRun = title.createRun();
+                titleRun.setText("Salary Receipt");
+                titleRun.setBold(true);
+                titleRun.setFontSize(24);
+                
+                XWPFTable table = document.createTable();
+                table.setWidth("65%");
+                table.setTableAlignment(TableRowAlign.CENTER);
+                addRow(table, "ID", employeeID_field.getText());
+                addRow(table, "Firstname", firstname_field.getText());
+                addRow(table, "Lastname", lastname_field.getText());
+                addRow(table, "AFM", afm_field.getText());
+                addRow(table, "Address", address_field.getText());
+                addRow(table, "AMKA", amka_field.getText());
+                addRow(table, "Year", year_field.getText());
+                addRow(table, "Month", month_field.getText());
+                addRow(table, "Salary", salary_field.getText() + "€");
+                addRow(table, "Leave Days", leaveDays_field.getText());
+                addRow(table, "Sick Days", sickDays_field.getText());
+                addRow(table, "Absence Days", absenceDays_field.getText());
+                table.removeRow(table.getNumberOfRows() -1);
+                
+                wordFOUT = new FileOutputStream(wordFileChooser.getSelectedFile() + ".docx");
+                wordBOUT = new BufferedOutputStream(wordFOUT);
+                document.write(wordBOUT);
+                JOptionPane.showMessageDialog(null, "Η εξαγωγή ήταν επιτυχής!");
+            }
+            catch(FileNotFoundException ex){
+                ex.printStackTrace();
+            }
+            catch(IOException ex){
+                ex.printStackTrace();
+            }
+            
+            finally{
+                try{
+                    if(wordBOUT != null) wordBOUT.close();
+                    if(wordFOUT != null) wordFOUT.close();                   
+                    if(document != null) document.close();
+                }
+                catch(IOException io){
+                    JOptionPane.showMessageDialog(null, io);
+                }
+            }
+        }
+    }//GEN-LAST:event_print_buttonActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(PrintReceiptForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(PrintReceiptForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(PrintReceiptForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(PrintReceiptForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new PrintReceiptForm().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField absenceDays_field;
+    private javax.swing.JTextField address_field;
+    private javax.swing.JTextField afm_field;
+    private javax.swing.JTextField amka_field;
+    private javax.swing.JTextField employeeID_field;
+    private javax.swing.JTextField firstname_field;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JTextField lastname_field;
+    private javax.swing.JTextField leaveDays_field;
+    private javax.swing.JTextField month_field;
+    private javax.swing.JButton print_button;
+    private javax.swing.JTextField salary_field;
+    private javax.swing.JTextField sickDays_field;
+    private javax.swing.JTextField year_field;
+    // End of variables declaration//GEN-END:variables
+}
