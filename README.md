@@ -51,7 +51,7 @@ The application expects the following **MySQL** tables to be present:
 - `unpaidabsences`  
 - `workhours`
 
-> Can be found in the db folder
+> Can be found in the repository as db
 
 ## 🚀 Getting Started
 
